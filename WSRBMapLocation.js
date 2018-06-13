@@ -28,8 +28,8 @@ var baidulocation = {
 	}
 };
 if(navigator.geolocation){
-navigator.geolocation.getCurrentPosition = function(){
-	return navigator.baiduLocation.getCurrentPosition.apply(navigator.baiduLocation,arguments);
-};
+	navigator.geolocation.getCurrentPosition = function(){
+		return navigator.baiduLocation.getCurrentPosition.apply(navigator.baiduLocation,arguments);
+	};
 }
 module.exports =  baidulocation;
