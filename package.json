@@ -1,0 +1,32 @@
+{
+  "name": "cordova-plugin-wsr-bmaplocation",
+  "version": "1.0.0",
+  "author": "Feng",
+  "description": "百度地图定位Cordova插件",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fengfei153/coodova-plugin-wsr-bmaplocation.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fengfei153/coodova-plugin-wsr-bmaplocation/issues"
+  },
+  "homepage": "https://github.com/fengfei153/coodova-plugin-wsr-bmaplocation#readme",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "cordova": {
+    "id": "cordova-plugin-wsr-bmaplocation",
+    "platforms": [
+      "android"
+    ]
+  },
+  "engines": {
+    "cordovaDependencies": {
+      "6.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "license": "MIT"
+}
