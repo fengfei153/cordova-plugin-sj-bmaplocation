@@ -15,7 +15,7 @@ var baidulocation = {
 				}
 			}, 
 			function(err){},
-			"BaiduLocation",
+			"WSRBMapLocation",
 			action,
 			[]
 		)
