@@ -29,7 +29,7 @@ var baidulocation = {
 };
 if(navigator.geolocation){
 	navigator.geolocation.getCurrentPosition = function(){
-		return navigator.baiduLocation.getCurrentPosition.apply(navigator.baiduLocation,arguments);
+		return plugins.WSRBMapLocation.getCurrentPosition.apply(plugins.WSRBMapLocation, arguments);
 	};
 }
 module.exports =  baidulocation;
