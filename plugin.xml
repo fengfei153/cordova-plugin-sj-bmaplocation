@@ -52,7 +52,7 @@
             <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="$ANDROID_KEY"/>
         </config-file>
 
-        <source-file src="libs/android/armeabi-v7a/liblocSDK6a.so" target-dir="app/libs/armeabi-v7a"/>
+        <resource-file src="libs/android/armeabi-v7a/liblocSDK6a.so" target="jniLibs/armeabi-v7a/liblocSDK6a.so"/>
         <lib-file src="libs/android/locSDK_6.23.jar" />
 
         <source-file src="src/android/WSRBMapLocation.java" target-dir="src/cn/weisiren/cordova/bmap" />
