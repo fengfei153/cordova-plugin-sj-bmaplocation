@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-wsr-bmaplocation",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "author": "Feng",
   "description": "百度地图定位Cordova插件",
   "repository": {

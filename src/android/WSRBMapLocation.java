@@ -1,6 +1,5 @@
 package cn.weisiren.cordova.bmap;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +16,8 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
@@ -31,13 +30,13 @@ public class WSRBMapLocation extends CordovaPlugin {
 	private static String TAG = "WSRBMapLocation";
 	
 	private static final String [] permissions = { Manifest.permission.ACCESS_FINE_LOCATION };
-	
-	public LocationClient locationClient = null;
+
 	public JSONObject jsonObj = new JSONObject();
 	public boolean result = false;
 	public CallbackContext callbackContext;
 
-	public BDLocationListener myListener;
+	public LocationClient locationClient = null;
+	public BDAbstractLocationListener myListener;
 
 	private static final Map<Integer, String> ERROR_MESSAGE_MAP = new HashMap<Integer, String>();
 
@@ -63,8 +62,7 @@ public class WSRBMapLocation extends CordovaPlugin {
 	}
 
 	@Override
-	public boolean execute(String action, JSONArray args,
-			final CallbackContext callbackContext) {
+	public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) {
 		setCallbackContext(callbackContext);
 		if (GET_ACTION.equals(action)) {
 			if(!hasPermisssion()) {
@@ -78,8 +76,7 @@ public class WSRBMapLocation extends CordovaPlugin {
 			callbackContext.success(200);
 			return true;
 		} else {
-			callbackContext
-					.error(PluginResult.Status.INVALID_ACTION.toString());
+			callbackContext.error(PluginResult.Status.INVALID_ACTION.toString());
 		}
 
 		while (result == false) {
@@ -96,33 +93,35 @@ public class WSRBMapLocation extends CordovaPlugin {
 		cordova.getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				locationClient = new LocationClient(cordova.getActivity());
-				myListener = new MyLocationListener();
-				locationClient.registerLocationListener(myListener);
-				LocationClientOption option = new LocationClientOption();
-				option.setOpenGps(true);
-				//option.setCoorType("bd09ll");
-				option.setLocationMode(LocationMode.Hight_Accuracy);// 设置定位模式
-				//option.setScanSpan(5000);
-				option.setIsNeedAddress(true);
-				locationClient.setLocOption(option);					
+				if(locationClient == null){
+					locationClient = new LocationClient(cordova.getActivity());
+					myListener = new MyLocationListener();
+					locationClient.registerLocationListener(myListener);
+					LocationClientOption option = new LocationClientOption();
+					option.setOpenGps(true);
+					//option.setCoorType("bd09ll");
+					option.setLocationMode(LocationMode.Hight_Accuracy);// 设置定位模式
+					//option.setScanSpan(5000);
+					option.setIsNeedAddress(true);
+					locationClient.setLocOption(option);
+				}
 				locationClient.start();
-				locationClient.requestLocation();
+				//locationClient.requestLocation();
 			}
 		});
 	}
 	
-	public class MyLocationListener implements BDLocationListener {
+	public class MyLocationListener extends BDAbstractLocationListener {
 		@Override
 		public void onReceiveLocation(BDLocation location) {
-			if (location == null)
+			if (location == null){
 				return;
+			}
 			try {
 				JSONObject coords = new JSONObject();
 				coords.put("latitude", location.getLatitude());
 				coords.put("longitude", location.getLongitude());
 				coords.put("radius", location.getRadius());
-
 				jsonObj.put("coords", coords);
 
 				int locationType = location.getLocType();
@@ -131,17 +130,15 @@ public class WSRBMapLocation extends CordovaPlugin {
 				jsonObj.put("message", getErrorMessage(locationType));
 
 				switch (location.getLocType()) {
+					case BDLocation.TypeGpsLocation:
+						coords.put("speed", location.getSpeed());
+						coords.put("altitude", location.getAltitude());
+						jsonObj.put("SatelliteNumber", location.getSatelliteNumber());
+						break;
 
-				case BDLocation.TypeGpsLocation:
-					coords.put("speed", location.getSpeed());
-					coords.put("altitude", location.getAltitude());
-					jsonObj.put("SatelliteNumber",
-							location.getSatelliteNumber());
-					break;
-
-				case BDLocation.TypeNetWorkLocation:
-					jsonObj.put("address", location.getAddrStr());
-					break;
+					case BDLocation.TypeNetWorkLocation:
+						jsonObj.put("address", location.getAddrStr());
+						break;
 				}
 
 				Log.d(TAG, "run: " + jsonObj.toString());
@@ -150,8 +147,9 @@ public class WSRBMapLocation extends CordovaPlugin {
 			} catch (JSONException e) {
 				callbackContext.error(e.getMessage());
 				result = true;
+			} finally {
+				locationClient.stop();
 			}
-
 		}
 
 		public void onReceivePoi(BDLocation poiLocation) {

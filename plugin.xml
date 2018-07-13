@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-plugin-wsr-bmaplocation"
-    version="1.0.0">
+    version="1.0.2">
     <name>WSRBMapLocation</name>
     <description>Cordova Plugin WSRBMapLocation</description>
     <author>Feng</author>
@@ -52,8 +52,13 @@
             <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="$ANDROID_KEY"/>
         </config-file>
 
-        <resource-file src="libs/android/armeabi-v7a/liblocSDK6a.so" target="jniLibs/armeabi-v7a/liblocSDK6a.so"/>
-        <lib-file src="libs/android/locSDK_6.23.jar" />
+        <resource-file src="libs/android/armeabi/libindoor.so" target="jniLibs/armeabi/libindoor.so"/>
+        <resource-file src="libs/android/armeabi/liblocSDK7b.so" target="jniLibs/armeabi/liblocSDK7b.so"/>
+        <resource-file src="libs/android/armeabi-v7a/libindoor.so" target="jniLibs/armeabi-v7a/libindoor.so"/>
+        <resource-file src="libs/android/armeabi-v7a/liblocSDK7b.so" target="jniLibs/armeabi-v7a/liblocSDK7b.so"/>
+        <resource-file src="libs/android/arm64-v8a/libindoor.so" target="jniLibs/arm64-v8a/libindoor.so"/>
+        <resource-file src="libs/android/arm64-v8a/liblocSDK7b.so" target="jniLibs/arm64-v8a/liblocSDK7b.so"/>
+        <lib-file src="libs/android/BaiduLBS_Android_7.5.jar" />
 
         <source-file src="src/android/WSRBMapLocation.java" target-dir="src/cn/weisiren/cordova/bmap" />
     </platform>
